@@ -8,7 +8,7 @@
       The remote topics and tf received will be prefixed with the remote_namespace.
       
       Notice that the ports are swapped compared to the launch in pcv_base package,
-        since we are running this on the host side (tx-->rx, and vice versa).
+        since we are running this on the host side (tx->rx, and vice versa).
     -->
     
     <arg name="target"    default="192.168.254.109" />
