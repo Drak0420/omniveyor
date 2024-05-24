@@ -51,6 +51,8 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>omniveyor_common</build_depend>
   <build_depend>geometry_msgs</build_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
   <build_depend>nav_core</build_depend>
   <build_depend>nav_msgs</build_depend>
   <build_depend>roscpp</build_depend>
@@ -81,7 +83,8 @@
   <exec_depend>pluginlib</exec_depend>
   <exec_depend>base_local_planner</exec_depend>
   <exec_depend>dynamic_reconfigure</exec_depend>
-
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
   <depend>refresh_ros</depend>
 
   <!-- The export tag contains other, unspecified, tags -->

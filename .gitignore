@@ -1,5 +1,5 @@
 omniveyor_mobility/resources/maps/*
-omniveyor_mobility/resources/traj/*
+omniveyor_mobility/resources/trajectories/*
 credentials
 build*/
 devel*/

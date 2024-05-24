@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="traj_file" default="traj_1"/>
-    
-    <!-- traj reader & run node -->
-    <node pkg="omniveyor_mobility" type="run_trajectory.py" name="trajectory_runner" output="screen">   
-        <param name="traj_file" value="$(find omniveyor_mobility)/resources/trajectories/$(arg traj_file).txt"/>
+  <arg name="traj_file" default="traj_1"/>
+  <arg name="gui" default="true"/>
+
+  <!-- traj reader & run node -->
+  <node pkg="omniveyor_mobility" type="run_trajectory.py" name="trajectory_runner" output="screen">   
+    <param name="traj_file" value="$(find omniveyor_mobility)/resources/trajectories/$(arg traj_file).txt"/>
     </node>
 
-    <!-- Visualization -->
-    <group if="$(arg gui)">
-	    <include file="$(find omniveyor_mobility)/launch/includes/visualization.launch" />
+  <!-- Visualization -->
+  <group if="$(arg gui)">
+    <include file="$(find omniveyor_mobility)/launch/includes/visualization.launch" />
     </group>
 </launch>

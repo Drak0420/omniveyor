@@ -32,4 +32,4 @@ class TrajWriter():
 if __name__=="__main__":
     rospy.init_node('trajectory_writer', anonymous=True)
     tw = TrajWriter()
-    tw.main()
+    tw.main() 

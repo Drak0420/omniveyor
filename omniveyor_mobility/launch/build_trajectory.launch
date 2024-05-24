@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
     <arg name="traj_file" default="traj_1"/>
     
