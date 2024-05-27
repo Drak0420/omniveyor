@@ -1,26 +1,26 @@
 <?xml version="1.0"?>
 <launch>
-	<arg name="gui" default="0"/>
-    <arg name="remote_teleop"   default="1"/>
-	<arg name="map_file" default="imi"/>
-    
-    <!-- base node -->
-	<include file="$(find pcv_base)/launch/run_barebones.launch">
-        <arg name="remote_teleop"   value="$(arg remote_teleop)"/>
-        <arg name="arduino_payload" value="0"/>
-    </include>
-
-    <!-- Localization -->
-    <include file="$(find omniveyor_mobility)/launch/includes/map_and_localization.launch">
-        <arg name="static_map" value="1"/>
-        <arg name="map_file" value="($arg map_file)"/>
-    </include>
-    
-    <!-- MoveBase navigation -->
-    <include file="$(find omniveyor_mobility)/launch/includes/navigation.launch" />
-
-    <!-- Visualization -->
-    <group if="$(arg gui)">
-	    <include file="$(find omniveyor_mobility)/launch/includes/visualization.launch" />
-    </group>
+  <arg name="gui" default="0"/>
+  <arg name="remote_teleop" default="1"/>
+  <arg name="aruco" default="1"/>
+  <arg name="map_file" default="imi"/>
+  <!-- base node -->
+  <include file="$(find pcv_base)/launch/run_barebones.launch">
+    <arg name="remote_teleop" value="$(arg remote_teleop)"/>
+    <arg name="arduino_payload" value="0"/>
+  </include>
+  <!-- Localization -->
+  <include file="$(find omniveyor_mobility)/launch/includes/map_and_localization.launch">
+    <arg name="static_map" value="1"/>
+    <arg name="map_file" value="($arg map_file)"/>
+  </include>
+  <!-- MoveBase navigation -->
+  <include file="$(find omniveyor_mobility)/launch/includes/navigation.launch"/>
+  <!-- Visualization -->
+  <group if="$(arg gui)">
+    <include file="$(find omniveyor_mobility)/launch/includes/visualization.launch"/>
+  </group>
+  <group if="$(arg aruco)">
+    <include file="$(find omniveyor_mobility)/launch/includes/aruco_detect.launch"/>
+  </group>
 </launch>

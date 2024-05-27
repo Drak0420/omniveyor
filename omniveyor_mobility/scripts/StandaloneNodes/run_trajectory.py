@@ -7,7 +7,7 @@ import tty
 import rospy
 from time import time
 from actionlib_msgs.msg import GoalID, GoalStatusArray
-from actionlib_msgs import MoveBaseActionGoal
+from actionlib_msgs.msg import MoveBaseActionGoal
 import numpy as np
 
 
