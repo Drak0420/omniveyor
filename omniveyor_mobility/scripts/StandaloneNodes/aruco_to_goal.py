@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
+from geometry_msgs.msg import Pose, Point, Quaternion
 import rospy
 from std_msgs.msg import Empty
 from aruco_msgs.msg import MarkerArray
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from tf.transformations import euler_from_quaternion
-import math
 import actionlib
 import termios
 import tty
 import sys
 import select
+import numpy as np
+import tf.transformations
 
 
 class ArucoToGoal:
@@ -37,28 +38,38 @@ class ArucoToGoal:
                 goal_target = goal.target_pose
                 # goal_target.header.frame_id = "base_link"
                 goal_target.header.stamp = rospy.Time.now()
-                offsets = self.get_offsets(marker)
                 goal_target.header.frame_id = "map"
-                goal_target.pose.position.x = offsets[0]
-                goal_target.pose.position.y = offsets[1]
-                goal_target.pose.position.z = 0.0
-                goal_target.pose.orientation.x = 0.0
-                goal_target.pose.orientation.y = 0.0
-                goal_target.pose.orientation.z = marker.pose.pose.orientation.y
-                goal_target.pose.orientation.w = 0.0
+                goal_target.pose = self.correct_pose(marker)
                 self.desired_goal = goal
 
-    def get_offsets(self, marker):
+    def correct_pose(self, marker):
         pose_obj = marker.pose.pose
-        orientation = pose_obj.orientation
-        (roll, pitch, yaw) = euler_from_quaternion(
-            [orientation.x, orientation.y, orientation.z, orientation.w]
-        )
-        x_offset = self.offset_dist * math.cos(pitch) + pose_obj.position.x
-        y_offset = self.offset_dist * math.sin(pitch) + pose_obj.position.y
-        return [x_offset, y_offset]
+        marker_pos = [pose_obj.position.x, pose_obj.position.y, pose_obj.position.z]
+        orientation = [
+            pose_obj.orientation.w,
+            pose_obj.orientation.x,
+            pose_obj.orientation.y,
+            pose_obj.orientation.z,
+        ]
+
+        # offset position in z direction - in front b/c that how aruco marker work
+        rot_matrix = tf.transformations.quaternion_matrix(orientation)
+        offset = np.array([0, 0, self.offset_dist])
+        offset = np.dot(rot_matrix, offset)
+        goal_pos = marker_pos + offset
+
+        # rotate quaternion to have AGV face the aruco marker
+        vector = marker_pos - goal_pos
+        vector /= np.linalg.norm(vector)
+        angle = np.arctan2(vector[1], vector[0])
+        goal_orient = tf.transformations.quaternion_from_euler(0, 0, angle)
+        goal_orient = goal_orient[1:] + [goal_orient[0]]
+
+        goal = Pose(Point(*goal_pos), Quaternion(*goal_orient))
+        return goal
 
     def goal_trig_cb(self, _):
+        rospy.loginfo("Sent goal: \n\r" + str(self.desired_goal))
         self.goal_pub.send_goal_and_wait(self.desired_goal)
 
     def getKey(self):
@@ -72,6 +83,7 @@ class ArucoToGoal:
         while not rospy.is_shutdown():
             key = self.getKey()
             if key == "D":
+                rospy.loginfo("Sent goal: \n\r" + str(self.desired_goal))
                 self.goal_pub.send_goal_and_wait(self.desired_goal)
             elif not key:
                 pass
