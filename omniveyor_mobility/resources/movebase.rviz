@@ -3,8 +3,7 @@ Panels:
     Help Height: 87
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /LaserScan1
+      Expanded: ~
       Splitter Ratio: 0.5
     Tree Height: 362
   - Class: rviz/Selection
@@ -71,7 +70,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -86,7 +85,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: map
@@ -291,26 +290,20 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 11.269929885864258
+      Angle: 0
+      Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Field of View: 0.7853981852531433
-      Focal Point:
-        X: -0.14468993246555328
-        Y: 0.08641365170478821
-        Z: -1.315364956855774
-      Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.4547964334487915
+      Scale: 51.17258834838867
       Target Frame: <Fixed Frame>
-      Yaw: 1.5953972339630127
+      X: 9.716930389404297
+      Y: -0.9175106287002563
     Saved: ~
 Window Geometry:
   Displays:
@@ -328,5 +321,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1366
-  X: -2
-  Y: -30
+  X: 0
+  Y: 0
