@@ -19,7 +19,7 @@ class TrajRunner:
         self.goal_trig_aruco = actionlib.SimpleActionClient(
             "/goal_aruco_trigger", GoalTriggerAction
         )
-        rospy.Subscriber("/goal_send_trigger", Empty, self.goal_trig_cb)
+        rospy.Subscriber("/goal_send_trigger", Empty, self.goal_trig_cb, queue_size=1)
         rospy.logdebug("TrajRunner Waiting for servers\r\n")
         self.goal_pub.wait_for_server()
         self.goal_trig_aruco.wait_for_server()

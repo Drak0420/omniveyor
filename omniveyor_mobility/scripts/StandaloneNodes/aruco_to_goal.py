@@ -42,7 +42,10 @@ class ArucoToGoal:
         # IDs are arcuo pattern 26 & 582
         self.marker_ids = [26, 582]
         self.offset_dist = float(rospy.get_param("~offset_dist"))
-        self.desired_goal = MoveBaseGoal()
+        self.desired_goal = None
+        self.goal_marker_id = -1
+        self.goal_marker_id_prev = -1
+        self.goal_lock = False
 
         rospy.Subscriber("/aruco_marker_publisher/markers", MarkerArray, self.aruco_cb)
         self.goal_trig_recieve = actionlib.SimpleActionServer(
@@ -55,6 +58,8 @@ class ArucoToGoal:
         rospy.loginfo("Aruco To Goal initialized")
 
     def aruco_cb(self, msg):
+        if self.goal_lock:
+            return
         for marker in msg.markers:
             if int(marker.id) in self.marker_ids:
                 goal = MoveBaseGoal()
@@ -63,16 +68,42 @@ class ArucoToGoal:
                 goal_target.header.frame_id = "map"
                 goal_target.pose = offset_pose(marker.pose.pose, self.offset_dist)
                 self.desired_goal = goal
+                self.goal_marker_id = marker.id
+                return
 
     def goal_trig_cb(self, _):
-        rospy.loginfo("Sent goal: \n\r" + str(self.desired_goal))
-        self.goal_pub.send_goal_and_wait(self.desired_goal)
-        goal_result = self.goal_pub.get_result()
-        assert goal_result is not None
-        if self.goal_pub.get_state() == actionlib.TerminalState.SUCCEEDED:
-            self.goal_trig_recieve.set_succeeded(goal_result)
-        else:
-            self.goal_trig_recieve.set_aborted(goal_result)
+        # Loop to try once & then retry range - 1 times
+        for i in range(3):
+            self.goal_lock = True  # lock to prevent race condition w/ aruco_cb
+            if (
+                self.goal_marker_id_prev == self.goal_marker_id
+                or self.desired_goal == None
+            ):
+                if i == 2:  # Don't print retry on last loop
+                    continue
+                rospy.logwarn(
+                    f"Did not execut goal ID={self.goal_marker_id}"
+                    + f", retrying #{i+1}"
+                )
+                self.goal_lock = False
+                # wait x time for new marker to hopefully be detected
+                rospy.sleep(0.5)
+                continue
+
+            self.goal_marker_id_prev = self.goal_marker_id
+            rospy.loginfo(
+                f"Sent goal ID={self.goal_marker_id}: \n\r" + str(self.desired_goal)
+            )
+            self.goal_pub.send_goal_and_wait(self.desired_goal)
+            self.desired_goal = None
+            self.goal_lock = False
+            if self.goal_pub.get_state() == actionlib.TerminalState.SUCCEEDED:
+                self.goal_trig_recieve.set_succeeded()
+            else:
+                self.goal_trig_recieve.set_aborted()
+            return
+        rospy.logwarn(f"Could not find new goal after 3 retries!")
+        self.goal_trig_recieve.set_aborted()
 
     def main(self):
         rospy.spin()
