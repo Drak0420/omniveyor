@@ -70,11 +70,9 @@ class ArucoToGoal:
         goal_result = self.goal_pub.get_result()
         assert goal_result is not None
         if self.goal_pub.get_state() == actionlib.TerminalState.SUCCEEDED:
-            print(str(goal_result))
-            print(goal_result)
-            self.goal_trig_recieve.set_succeeded(goal_result.status)
+            self.goal_trig_recieve.set_succeeded(goal_result)
         else:
-            self.goal_trig_recieve.set_aborted(goal_result.status)
+            self.goal_trig_recieve.set_aborted(goal_result)
 
     def main(self):
         rospy.spin()

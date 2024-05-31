@@ -46,13 +46,17 @@ class TrajRunner:
 
     def goal_trig_aruco_func(self):
         self.goal_trig_aruco.send_goal_and_wait(GoalTriggerGoal())
-        if self.goal_trig_aruco.get_state() == actionlib.TerminalState.SUCCEEDED:
+        action_state = self.goal_trig_aruco.get_state()
+        if action_state == actionlib.TerminalState.SUCCEEDED:
             rospy.loginfo(
                 "Succesfully reached desired trajectory goal and lined up with aruco marker\n\r"
             )
         else:
             rospy.logerr(
-                "Failed to reach goal: \r\n" + str(self.goal_trig_aruco.get_result())
+                "Failed to reach goal: \r\n"
+                + str(self.goal_trig_aruco.get_result())
+                + "\r\nState was: "
+                + str(action_state)
             )
 
     def main(self):
