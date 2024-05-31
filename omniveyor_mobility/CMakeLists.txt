@@ -14,7 +14,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  genmsg
   actionlib_msgs
   actionlib
   move_base_msgs
@@ -34,9 +33,9 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 # # See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
 # catkin_python_setup()
 
-# # # # # # # # ########################################
+# # # # # # # # # # # # # ###################################
 # # Declare ROS messages, services and actions # #
-# # # # # # # # ########################################
+# # # # # # # # # # # # # ###################################
 
 # # To declare and build messages, services or actions from within this
 # # package, follow these steps:
@@ -73,18 +72,16 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 # )
 
 # # Generate actions in the 'action' folder
-add_action_files(
-  FILES
-  GoalTrigger.action
-)
+# add_action_files(
+# FILES
+# Action1.action
+# )
 
 # # Generate added messages and services with any dependencies listed here
-generate_messages(
-    DEPENDENCIES
-    std_msgs
-    nav_msgs
-    actionlib_msgs
-)
+#generate_messages(
+#DEPENDENCIES
+#std_msgs
+#)
 
 # # ----------------------------------------------
 # # - Declare ROS dynamic reconfigure parameters -
@@ -118,7 +115,6 @@ catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES pid_controller
   CATKIN_DEPENDS
-  message_runtime
   geometry_msgs
   nav_msgs
   actionlib_msgs
@@ -127,6 +123,7 @@ catkin_package(
   rospy
   std_msgs
   tf
+  omniveyor_common
 #  costmap_2d
   nav_core
   pluginlib

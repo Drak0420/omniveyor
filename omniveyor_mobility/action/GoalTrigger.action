@@ -1,5 +1,0 @@
-std_msgs/Empty trigger
----
-actionlib_msgs/GoalStatus status
----
-actionlib_msgs/GoalStatus status

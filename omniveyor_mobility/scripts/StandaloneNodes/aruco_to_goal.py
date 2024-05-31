@@ -9,7 +9,7 @@ from scipy.spatial.transform import Rotation as R
 from aruco_msgs.msg import MarkerArray
 from geometry_msgs.msg import Point, Pose, Quaternion
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from omniveyor_mobility.msg import GoalTriggerAction
+from omniveyor_common.msg import GoalTriggerAction
 from std_msgs.msg import Empty
 
 
