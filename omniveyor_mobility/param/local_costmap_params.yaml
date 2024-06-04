@@ -6,12 +6,13 @@ local_costmap:
   rolling_window: true
   width: 5
   height: 5
+  circumscribed_radius: 10.0
   resolution: 0.025
-  
+
   transform_tolerance: 0.5
-  
+
   plugins:
-   - {name: static_layer_reuse,  type: "costmap_2d::StaticLayer"}
-   - {name: obstacle_layer,      type: "costmap_2d::ObstacleLayer"}
-   #- {name: rgbd_obstacle_layer, type: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"}
-   - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}
+    - { name: static_layer_reuse, type: "costmap_2d::StaticLayer" }
+    - { name: obstacle_layer, type: "costmap_2d::ObstacleLayer" }
+    #- {name: rgbd_obstacle_layer, type: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"}
+    - { name: inflation_layer, type: "costmap_2d::InflationLayer" }

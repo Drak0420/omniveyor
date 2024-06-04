@@ -92,7 +92,7 @@ class ArucoToGoal:
 
             self.goal_marker_id_prev = self.goal_marker_id
             rospy.loginfo(
-                f"Sent goal ID={self.goal_marker_id}: \n\r" + str(self.desired_goal)
+                f"Sent goal ID={self.goal_marker_id}: \r" + str(self.desired_goal)
             )
             self.goal_pub.send_goal_and_wait(self.desired_goal)
             self.desired_goal = None

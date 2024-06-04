@@ -20,7 +20,7 @@ class TrajRunner:
             "/goal_aruco_trigger", GoalTriggerAction
         )
         rospy.Subscriber("/goal_send_trigger", Empty, self.goal_trig_cb, queue_size=1)
-        rospy.logdebug("TrajRunner Waiting for servers\r\n")
+        rospy.logdebug("TrajRunner Waiting for servers\r")
         self.goal_pub.wait_for_server()
         self.goal_trig_aruco.wait_for_server()
         rospy.logdebug("Action servers ready - TrajRunner Ready!")
@@ -34,7 +34,7 @@ class TrajRunner:
         goal.target_pose.header.stamp = rospy.Time.now()
         goal.target_pose.header.frame_id = "map"
         goal.target_pose.pose = Pose(Point(*goal_pose[:3]), Quaternion(*goal_pose[3:]))
-        rospy.loginfo(f"Sent goal #{self.trajNum} out: \n\r" + str(goal))
+        rospy.loginfo(f"Sent goal #{self.trajNum} out: \r" + str(goal))
         self.goal_pub.send_goal_and_wait(goal)
         if self.goal_pub.get_state() == actionlib.TerminalState.SUCCEEDED:
             self.trajNum = self.trajNum + 1
@@ -42,18 +42,18 @@ class TrajRunner:
                 self.trajNum = 0
             self.goal_trig_aruco_func()
         else:
-            rospy.logerr("Failed to reach goal: \r\n" + str(self.goal_pub.get_result()))
+            rospy.logerr("Failed to reach goal: \r" + str(self.goal_pub.get_result()))
 
     def goal_trig_aruco_func(self):
         self.goal_trig_aruco.send_goal_and_wait(GoalTriggerGoal())
         action_state = self.goal_trig_aruco.get_state()
         if action_state == actionlib.TerminalState.SUCCEEDED:
             rospy.loginfo(
-                "Succesfully reached desired trajectory goal and lined up with aruco marker\n\r"
+                "Succesfully reached desired trajectory goal and lined up with aruco marker\r"
             )
         else:
             rospy.logerr(
-                "Failed to reach goal: \r\n"
+                "Failed to reach goal: \r"
                 + str(self.goal_trig_aruco.get_result())
                 + "\r\nState was: "
                 + str(action_state)
