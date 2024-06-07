@@ -44,7 +44,6 @@ class ArucoToGoal:
         self.offset_dist = float(rospy.get_param("~offset_dist"))
         self.desired_goal = None
         self.goal_marker_id = -1
-        self.goal_marker_id_prev = -1
         self.goal_lock = False
 
         rospy.Subscriber("/aruco_marker_publisher/markers", MarkerArray, self.aruco_cb)
@@ -71,14 +70,11 @@ class ArucoToGoal:
                 self.goal_marker_id = marker.id
                 return
 
-    def goal_trig_cb(self, _):
+    def goal_trig_cb(self, aruco_id):
         # Loop to try once & then retry range - 1 times
         for i in range(3):
             self.goal_lock = True  # lock to prevent race condition w/ aruco_cb
-            if (
-                self.goal_marker_id_prev == self.goal_marker_id
-                or self.desired_goal == None
-            ):
+            if self.goal_marker_id != aruco_id or self.desired_goal == None:
                 if i == 2:  # Don't print retry on last loop
                     continue
                 rospy.logwarn(
@@ -90,7 +86,6 @@ class ArucoToGoal:
                 rospy.sleep(0.5)
                 continue
 
-            self.goal_marker_id_prev = self.goal_marker_id
             rospy.loginfo(
                 f"Sent goal ID={self.goal_marker_id}: \r" + str(self.desired_goal)
             )
