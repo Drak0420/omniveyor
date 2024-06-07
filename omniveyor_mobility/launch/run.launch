@@ -3,7 +3,7 @@
   <arg name="gui" default="0"/>
   <arg name="remote_teleop" default="1"/>
   <arg name="aruco" default="1"/>
-  <arg name="map_file" default="IMI_001"/>
+  <arg name="map_file" default="map"/>
   <!-- base node -->
   <include file="$(find pcv_base)/launch/run_barebones.launch">
     <arg name="remote_teleop" value="$(arg remote_teleop)"/>
