@@ -42,6 +42,7 @@ class TrajWriter:
                 current_position.pose.pose.orientation.w,
             ]
         ]
+        # Add to desired location or fail
         if len(self.traj) >= msg.data + 1:
             self.traj[msg.data] = new_goal
             rospy.loginfo("Recorded: %s as goal #%d\r" % (str(new_goal), msg.data))

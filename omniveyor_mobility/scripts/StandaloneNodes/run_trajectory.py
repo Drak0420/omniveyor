@@ -26,7 +26,8 @@ class TrajRunner:
         self.goal_trig_aruco.wait_for_server()
         rospy.logdebug("Action servers ready - TrajRunner Ready!")
 
-    def goal_trig_cb(self, goal_num):
+    def goal_trig_cb(self, msg):
+        goal_num = msg.data
         if len(self.traj) - 1 < goal_num:
             rospy.logerr(
                 f"Recieved invalid goal #{goal_num}, only have {len(self.traj)} goals"
@@ -43,6 +44,8 @@ class TrajRunner:
             self.goal_trig_aruco_func(goal_num)
         else:
             rospy.logerr("Failed to reach goal: \r" + str(self.goal_pub.get_result()))
+
+        rospy.sleep(rospy.Duration(10))  # sleep to allow operator to place items
 
     def goal_trig_aruco_func(self, goal_num):
         self.goal_trig_aruco.send_goal_and_wait(
