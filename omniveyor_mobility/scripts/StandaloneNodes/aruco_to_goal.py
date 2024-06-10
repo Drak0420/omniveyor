@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import subprocess
 import actionlib
 import numpy as np
 import rospy
@@ -46,7 +47,9 @@ class ArucoToGoal:
         self.goal_marker_id = -1
         self.goal_lock = False
 
-        rospy.Subscriber("/aruco_marker_publisher/markers", MarkerArray, self.aruco_cb)
+        camera_markers_sub = rospy.Subscriber(
+            "/aruco_marker_publisher/markers", MarkerArray, self.aruco_cb
+        )
         self.goal_trig_recieve = actionlib.SimpleActionServer(
             "/goal_aruco_trigger", GoalTriggerAction, self.goal_trig_cb, False
         )
@@ -54,6 +57,11 @@ class ArucoToGoal:
         rospy.Subscriber("/aruco_goal_send", Empty, self.goal_trig_cb)
         self.goal_pub = actionlib.SimpleActionClient("move_base", MoveBaseAction)
         self.goal_pub.wait_for_server()
+
+        while camera_markers_sub.get_num_connections() <= 0:
+            rospy.logwarn("Aruco: Waiting for camera node to reset!")
+            self.reset_camera()
+            rospy.sleep(rospy.Duration(15))
         rospy.loginfo("Aruco To Goal initialized")
 
     def aruco_cb(self, msg):
@@ -102,6 +110,9 @@ class ArucoToGoal:
 
     def main(self):
         rospy.spin()
+
+    def reset_camera(self):
+        subprocess.run(["rosnode", "kill", "cam_d1/realsense2_camera"])
 
 
 if __name__ == "__main__":
