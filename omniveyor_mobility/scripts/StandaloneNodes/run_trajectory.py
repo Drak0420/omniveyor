@@ -4,7 +4,7 @@ import rospy
 from std_msgs.msg import Int8
 from geometry_msgs.msg import Pose, Point, Quaternion
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from omniveyor_common.msg import GoalTriggerAction, GoalTriggerGoal
+from omniveyor_common.msg import GoalTriggerAction
 import numpy as np
 import actionlib
 

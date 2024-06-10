@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="traj_file" default="traj_1"/>
+  <arg name="gui" default="0"/>
   <!-- Trajectory reader-->
   <node pkg="omniveyor_mobility" type="create_trajectory.py" name="trajectory_writer" output="screen">
     <param name="traj_file" value="$(find omniveyor_mobility)/resources/trajectories/$(arg traj_file).txt"/>
   </node>
   <!-- Visualization -->
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find omniveyor_mobility)/resources/mapview.rviz"/>
+  <group if="$(arg gui)">
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find omniveyor_mobility)/resources/movebase.rviz"/>
+  </group>
 </launch>

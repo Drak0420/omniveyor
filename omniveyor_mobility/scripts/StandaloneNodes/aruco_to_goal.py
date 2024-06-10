@@ -59,7 +59,7 @@ class ArucoToGoal:
         self.goal_pub.wait_for_server()
 
         while camera_markers_sub.get_num_connections() <= 0:
-            rospy.logwarn("Aruco: Waiting for camera node to reset!")
+            rospy.logwarn("Aruco: Waiting for cam_d1 color stream to start!")
             self.reset_camera()
             rospy.sleep(rospy.Duration(15))
         rospy.loginfo("Aruco To Goal initialized")
