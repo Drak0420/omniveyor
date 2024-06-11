@@ -40,8 +40,8 @@ static_layer_reuse:
 
 rgbd_obstacle_layer_d1:
   enabled: true
-  voxel_decay: 1. #seconds if linear, e^n if exponential
-  decay_model: -1 #0=linear, 1=exponential, -1=persistent
+  voxel_decay: 10. #seconds if linear, e^n if exponential
+  decay_model: 0 #0=linear, 1=exponential, 2=persistent
   voxel_size: 0.02 #meters
   track_unknown_space: true #default space is unknown
   unknown_threshold: 15 #voxel height
@@ -77,9 +77,9 @@ rgbd_obstacle_layer_d1:
     voxel_min_points: 0 #default 0, minimum points per voxel for voxel filter
 
 rgbd_obstacle_layer_d2:
-  enabled: false
-  voxel_decay: 1. #seconds if linear, e^n if exponential
-  decay_model: -1 #0=linear, 1=exponential, -1=persistent
+  enabled: true
+  voxel_decay: 10. #seconds if linear, e^n if exponential
+  decay_model: 0 #0=linear, 1=exponential, 2=persistent
   voxel_size: 0.02 #meters
   track_unknown_space: true #default space is unknown
   unknown_threshold: 15 #voxel height
@@ -88,7 +88,7 @@ rgbd_obstacle_layer_d2:
   combination_method: 1 #1=max, 0=override
   obstacle_range: 6.0 #meters
   min_tracked_height: 0.02
-  max_tracked_height: 1.0
+  max_tracked_height: 0.6
   publish_voxel_map: true # default off
   transform_tolerance: 0.2 # seconds
   mapping_mode: false # default off, saves map not for navigation
