@@ -1,25 +1,24 @@
 <?xml version="1.0"?>
 <launch>
-    <env name="LD_PRELOAD" value="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"/>
-    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-        <rosparam file="$(find omniveyor_mobility)/param/move_base_params.yaml" command="load" />
-        <rosparam file="$(find omniveyor_mobility)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find omniveyor_mobility)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find omniveyor_mobility)/param/local_costmap_params.yaml"  command="load" />
-        <rosparam file="$(find omniveyor_mobility)/param/global_costmap_params.yaml" command="load" />
-
-        <rosparam file="$(find omniveyor_mobility)/param/teb_local_planner_params.yaml" command="load" />
-        <rosparam file="$(find omniveyor_mobility)/param/dwa_local_planner_params.yaml" command="load" />
-        <rosparam file="$(find omniveyor_mobility)/param/pid_controller_params.yaml" command="load" />
-        
-        <rosparam file="$(find omniveyor_mobility)/param/navfnros_params.yaml" command="load" />
-        <rosparam file="$(find omniveyor_mobility)/param/carrot_planner_params.yaml" command="load" />
-        <rosparam file="$(find omniveyor_mobility)/param/global_planner_params.yaml" command="load" />
-
-        <param name="base_global_planner" value="navfn/NavfnROS" />
-        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
-
-        <!-- Rotate in place is not allowed. Handled through self adaptation. -->
-        <param name="clearing_rotation_allowed" value="true" />
-    </node>
+  <arg name="remote_launch" default="0"/>
+  <include if="$(arg remote_launch)" file="$(find omniveyor_mobility)/launch/agv.machine"/>
+  <include unless="$(arg remote_launch)" file="$(find omniveyor_mobility)/launch/local.machine"/>
+  <env name="LD_PRELOAD" value="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"/>
+  <node machine="AGV" pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find omniveyor_mobility)/param/move_base_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find omniveyor_mobility)/param/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find omniveyor_mobility)/param/local_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/global_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/teb_local_planner_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/dwa_local_planner_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/pid_controller_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/navfnros_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/carrot_planner_params.yaml" command="load"/>
+    <rosparam file="$(find omniveyor_mobility)/param/global_planner_params.yaml" command="load"/>
+    <param name="base_global_planner" value="navfn/NavfnROS"/>
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
+    <!-- Rotate in place is not allowed. Handled through self adaptation. -->
+    <param name="clearing_rotation_allowed" value="true"/>
+  </node>
 </launch>

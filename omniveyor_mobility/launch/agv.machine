@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <machine name="AGV" address="192.168.1.126" default="never" env-loader="/home/cartman/Dev/omniveyor_newsetup/devel/env.sh"/>
+</launch>

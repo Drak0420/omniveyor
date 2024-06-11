@@ -3,11 +3,14 @@
   <arg name="traj_file" default="traj_1"/>
   <arg name="gui" default="false"/>
   <arg name="offset_dist" default="1.5"/>
+  <arg name="remote_launch" default="0"/>
+  <include if="$(arg remote_launch)" file="$(find omniveyor_mobility)/launch/agv.machine"/>
+  <include unless="$(arg remote_launch)" file="$(find omniveyor_mobility)/launch/local.machine"/>
   <!-- traj reader & run node -->
-  <node pkg="omniveyor_mobility" type="run_trajectory.py" name="trajectory_runner" output="screen">
+  <node machine="AGV" pkg="omniveyor_mobility" type="run_trajectory.py" name="trajectory_runner" output="screen">
     <param name="traj_file" value="$(find omniveyor_mobility)/resources/trajectories/$(arg traj_file).txt"/>
   </node>
-  <node pkg="omniveyor_mobility" type="aruco_to_goal.py" name="aruco_to_goal" output="screen">
+  <node machine="AGV" pkg="omniveyor_mobility" type="aruco_to_goal.py" name="aruco_to_goal" output="screen">
     <param name="offset_dist" value="$(arg offset_dist)"/>
   </node>
   <!-- Visualization -->

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="build_trajectory" default="0"/>
+  <arg name="remote_launch" default="true"/>
+  <!--Local operation-->
+  <!--<include file="$(find pcv_base)/launch/includes/joystick_teleop.launch"/>-->
+  <!--Visualization-->
+  <!--
+  <node name="rqt" pkg="rqt" type="rqt" args="-d" />
+  -->
+  <!--On AGV operation-->
+  <include file="$(find omniveyor_mobility)/launch/run.launch">
+    <arg name="remote_launch" value="$(arg remote_launch)"/>
+  </include>
+  <include if="$(arg build_trajectory)" file="$(find omniveyor_mobility)/launch/build_trajectory.launch">
+    <arg name="remote_launch" value="$(arg remote_launch)"/>
+  </include>
+  <include unless="$(arg build_trajectory)" file="$(find omniveyor_mobility)/launch/run_trajectory.launch">
+    <arg name="remote_launch" value="$(arg remote_launch)"/>
+  </include>
+</launch>

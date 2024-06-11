@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <machine name="AGV" address="localhost" default="never" env-loader="~/Dev/ros_ws/devel/env.sh"/>
+</launch>

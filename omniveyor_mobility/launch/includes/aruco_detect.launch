@@ -6,7 +6,10 @@
   <!-- camera namespace -->
   <arg name="camera_frame" default="cam_d1_optical_frame"/>
   <!-- leave empty and the pose will be published wrt param parent_name -->
-  <node pkg="aruco_ros" type="marker_publisher" name="aruco_marker_publisher">
+  <arg name="remote_launch" default="0"/>
+  <include if="$(arg remote_launch)" file="$(find omniveyor_mobility)/launch/agv.machine"/>
+  <include unless="$(arg remote_launch)" file="$(find omniveyor_mobility)/launch/local.machine"/>
+  <node machine="AGV" pkg="aruco_ros" type="marker_publisher" name="aruco_marker_publisher">
     <remap from="camera_info" to="$(arg camera_name)/camera_info"/>
     <remap from="image" to="$(arg camera_name)/image_raw"/>
     <remap from="markers" to="meaningful_objects/aruco_makers/poses_raw"/>
